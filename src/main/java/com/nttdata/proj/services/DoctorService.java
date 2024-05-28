@@ -15,7 +15,7 @@ public class DoctorService {
     @Autowired
     DoctorRepository doctorRepository;
 
-    public List getAllDoctors(){
+    public List<Doctor> getAllDoctors(){
         return doctorRepository.findAll();
     }
 
@@ -35,7 +35,10 @@ public class DoctorService {
         return doctorRepository.save(doctor);
 
     }
-    public void deleteDoctor(Long id) {
+    public void deleteDoctor(long id) {
+        if (!doctorRepository.existsById(id)) {
+            throw new IllegalArgumentException("Doctor with id: " + id + " does not exist");
+        }
         doctorRepository.deleteById(id);
     }
 

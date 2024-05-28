@@ -17,6 +17,26 @@ public class Doctor {
     private String specialty;
     private int yearsOfExperience;
 
+    public Doctor() { //constructor without param
+    }
+
+    public Doctor(Long doctorId, String firstName, String lastName, String specialty, int yearsOfExperience) {
+        this.doctorId = doctorId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.specialty = specialty;
+        this.yearsOfExperience = yearsOfExperience;
+    }
+
+    public Doctor(Long doctorId, String firstName, String lastName, String specialty, int yearsOfExperience, List<Patient> patients) {
+        this.doctorId = doctorId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.specialty = specialty;
+        this.yearsOfExperience = yearsOfExperience;
+        this.patients = patients;
+    }
+
     public Long getDoctorId() {
         return doctorId;
     }

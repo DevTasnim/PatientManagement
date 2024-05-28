@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/patients")
 public class PatientController {
     @Autowired
@@ -25,7 +25,7 @@ public class PatientController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createPatient(@RequestBody Patient patient){
+    public ResponseEntity<Patient> createPatient(@RequestBody Patient patient){
         Patient createdPatient = patientService.createPatient(patient);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdPatient);
     }
@@ -38,7 +38,7 @@ public class PatientController {
         }
         return ResponseEntity.ok(patient);
     }
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<?> updatePatient(@PathVariable long id , @RequestBody Patient patient){
         Patient existingPatient = patientService.getPatientById(id);
         if (existingPatient == null){
@@ -48,10 +48,33 @@ public class PatientController {
         return ResponseEntity.ok(updatedPatient);
 
     }
-    @GetMapping("/by-doctor")
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deletePatient(@PathVariable long id) {
+        try {
+            patientService.deletePatient(id);
+            return ResponseEntity.status(HttpStatus.OK).body("Patient deleted successfully");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/bydoctor")
     public ResponseEntity<Map<Doctor, List<Patient>>> getPatientsByDoctor() {
         Map<Doctor, List<Patient>> patientsByDoctor = patientService.getPatientsByDoctor();
         return ResponseEntity.ok(patientsByDoctor);
+    }
+
+    @GetMapping("/byAgeRange")
+    public ResponseEntity<Map<String, List<Patient>>> getPatientsByAgeRange() {
+        Map<String, List<Patient>> patientsByAgeRange = patientService.getPatientsByAgeRange();
+        return new ResponseEntity<>(patientsByAgeRange, HttpStatus.OK);
+    }
+
+    @PostMapping("/assignDoctor")
+    public ResponseEntity<Void> assignDoctorToPatient(@RequestBody List<Patient> patients) {
+        patientService.savePatients(patients);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

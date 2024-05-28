@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/doctors")
+@CrossOrigin(origins = "http://localhost:4200")
 public class DoctorController {
 
     @Autowired
@@ -35,7 +36,7 @@ public class DoctorController {
         }
         return ResponseEntity.ok(doctor);
     }
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<?> updateDoctor(@PathVariable long id , @RequestBody Doctor doctor){
         Doctor existingDoctor = doctorService.getDoctorById(id);
         if (existingDoctor == null){
@@ -44,12 +45,15 @@ public class DoctorController {
         Doctor updatedDoctor = doctorService.updateDoctor(id, doctor);
         return ResponseEntity.ok(updatedDoctor);
     }
-
-
-
-
-
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteDoctor(@PathVariable long id) {
+        try {
+            doctorService.deleteDoctor(id);
+            return ResponseEntity.status(HttpStatus.OK).body("Doctor deleted successfully");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 
 
 }

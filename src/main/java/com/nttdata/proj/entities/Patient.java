@@ -15,6 +15,21 @@ public class Patient {
     private String dateOfBirth;
     private String medicalHistory;
 
+    public Patient() { //constructor without params
+    }
+
+    public Patient(Long patientId, String firstName, String lastName, int age, String dateOfBirth, String medicalHistory, Doctor doctor) {
+        this.patientId = patientId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.dateOfBirth = dateOfBirth;
+        this.medicalHistory = medicalHistory;
+        this.doctor = doctor;
+    }
+
+
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
